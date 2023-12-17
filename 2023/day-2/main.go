@@ -89,5 +89,67 @@ func part1(lines []string) string {
 }
 
 func part2(lines []string) string {
-	return "Not finished"
+	total := 0
+
+	for _, v := range lines {
+
+		if v == "" {
+			continue
+		}
+
+		stringWithoutId := strings.Split(v, ":")[1]
+
+		allGames := strings.Split(stringWithoutId, ";")
+
+		minRed := 0
+		minGreen := 0
+		minBlue := 0
+
+		for _, game := range allGames {
+
+			red := 0
+			green := 0
+			blue := 0
+
+			fieldsSlice := strings.Fields(game)
+
+			for j := 0; j < len(fieldsSlice)/2; j++ {
+				numString := fieldsSlice[j*2]
+				colorString := fieldsSlice[(j*2)+1]
+
+				num, err := strconv.Atoi(numString)
+				if err != nil {
+					panic(err)
+				}
+
+				if strings.Contains(colorString, "red") {
+					red += num
+				}
+
+				if strings.Contains(colorString, "green") {
+					green += num
+				}
+
+				if strings.Contains(colorString, "blue") {
+					blue += num
+				}
+			}
+
+			if red > minRed {
+				minRed = red
+			}
+
+			if green > minGreen {
+				minGreen = green
+			}
+
+			if blue > minBlue {
+				minBlue = blue
+			}
+		}
+
+		total += minRed * minGreen * minBlue
+	}
+
+	return fmt.Sprintf("%d", total)
 }
