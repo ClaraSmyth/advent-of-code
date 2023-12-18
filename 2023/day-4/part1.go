@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"slices"
-	"strconv"
 	"strings"
 )
 
@@ -38,13 +37,4 @@ func part1(lines []string) string {
 	}
 
 	return fmt.Sprintf("%d", total)
-}
-
-func stringToNum(s string) int {
-	num, err := strconv.Atoi(s)
-	if err != nil {
-		panic(err)
-	}
-
-	return num
 }
