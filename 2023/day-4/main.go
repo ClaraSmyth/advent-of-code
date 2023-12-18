@@ -16,6 +16,8 @@ func main() {
 	lines := strings.Split(string(data), "\n")
 
 	answerPart1 := part1(lines)
+	answerPart2 := part2(lines)
 
 	fmt.Println("Part 1 -", answerPart1)
+	fmt.Println("Part 2 -", answerPart2)
 }
