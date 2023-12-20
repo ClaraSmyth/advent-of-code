@@ -8,33 +8,20 @@ import (
 )
 
 func part1(lines []string) string {
-	maps := formatLines(lines)
-
-	seeds := strings.Fields(maps[0][0])
+	seeds, maps := formatLines(lines)
 
 	finalValues := []int{}
 
 	for _, seed := range seeds {
-		output := stringToNum(seed)
+		output := seed
 
-		for i := 0; i < len(maps); i++ {
-
-			if i == 0 {
-				continue
-			}
+		for i := 0; i < len(maps)-1; i++ {
 
 			currentMap := maps[i]
 
 			for _, line := range currentMap {
-
-				values := strings.Fields(line)
-
-				value1 := stringToNum(values[0])
-				value2 := stringToNum(values[1])
-				value3 := stringToNum(values[2])
-
-				if output >= value2 && output < (value2+value3) {
-					output = output + (value1 - value2)
+				if output >= line[1] && output < (line[1]+line[2]) {
+					output = output + (line[0] - line[1])
 					break
 				}
 			}
@@ -54,28 +41,49 @@ func stringToNum(s string) int {
 	return num
 }
 
-func formatLines(lines []string) map[int][]string {
-	maps := map[int][]string{}
+func formatLines(lines []string) ([]int, [][][]int) {
+	seeds := []int{}
 
-	dataIndex := 0
+	maps := [][][]int{}
 
 	for i, line := range lines {
 
 		if i == 0 {
-			maps[dataIndex] = []string{strings.Split(line, ":")[1]}
+
+			seedStrings := strings.Fields(strings.Split(line, ":")[1])
+
+			for _, seed := range seedStrings {
+				seeds = append(seeds, stringToNum(seed))
+			}
 		}
 
 		if len(line) == 0 {
-			dataIndex += 1
+			maps = append(maps, [][]int{})
 			continue
 		}
 
 		if strings.Contains(line, ":") {
 			continue
-		} else {
-			maps[dataIndex] = append(maps[dataIndex], line)
 		}
+
+		fields := strings.Fields(line)
+
+		newMap := []int{}
+
+		for _, num := range fields {
+			newMap = append(newMap, stringToNum(num))
+		}
+
+		index := len(maps) - 1
+
+		maps[index] = append(maps[index], newMap)
+
 	}
 
-	return maps
+	// Checks if there is an empty slice at the end and removes it
+	if len(maps[len(maps)-1]) == 0 {
+		maps = maps[:len(maps)-1]
+	}
+
+	return seeds, maps
 }
